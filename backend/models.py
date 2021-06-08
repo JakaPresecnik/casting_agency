@@ -65,6 +65,12 @@ def setup_db(app):
     #     release_date = datetime.date(2010, 5, 1)
     # )
     # movie.insert()
+    # actor = Actor(
+    #     name = 'Test',
+    #     age = 32,
+    #     gender = 'Female'
+    # )
+    # actor.insert()
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -102,6 +108,13 @@ class Movie(db.Model):
             'release_date': self.release_date
         }
 
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
 '''
 Actors with attributes name, age and gender with functions:
 insert (new actor to database), format (to return formatted object)
@@ -132,3 +145,10 @@ class Actor(db.Model):
             'age': self.age,
             'gender': self.gender
         }
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()

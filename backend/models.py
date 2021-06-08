@@ -49,7 +49,7 @@ It checks if the database exists and creates it if it doesn't
 '''
 
 
-def setup_db(app):
+def setup_db(app, database_path=database_path):
     if not database_exists(database_path):
         create_database(database_path)
 

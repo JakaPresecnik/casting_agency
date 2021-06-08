@@ -395,7 +395,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 400,
             'message': 'Bad Request'
-        })
+        }), 400
 
     @app.errorhandler(404)
     def not_found(error):
@@ -403,7 +403,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 404,
             'message': 'Not Found'
-        })
+        }), 404
 
     @app.errorhandler(405)
     def method_not_allowed(error):
@@ -411,7 +411,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 405,
             'message': 'Method Not Allowed'
-        })
+        }), 405
 
     @app.errorhandler(409)
     def conflict(error):
@@ -419,7 +419,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 409,
             'message': 'Conflict. Already Exists'
-        })
+        }), 409
 
     @app.errorhandler(422)
     def unprocassable(error):
@@ -427,7 +427,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 422,
             'message': 'Unprocessable Entity'
-        })
+        }), 422
 
     @app.errorhandler(500)
     def internal_error(error):
@@ -435,7 +435,7 @@ def create_app(test_config=None):
             'success': False,
             'error': 500,
             'message': 'Internal Server Error'
-        })
+        }), 500
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #      _               _                      _

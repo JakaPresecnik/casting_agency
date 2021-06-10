@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 from models import *
 from helper_functions import *
+from auth import AuthError, requires_auth
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -57,7 +58,8 @@ def create_app(test_config=None):
     '''
 
     @app.route('/actors', methods=['GET'])
-    def get_actors():
+    @requires_auth('get:actors')
+    def get_actors(payload):
         # Sorting by name and by age added, assuming
         # when hiring actors they might need a certain age range.
         # It orders by id if the arg is not known
@@ -96,7 +98,8 @@ def create_app(test_config=None):
     '''
 
     @app.route('/movies', methods=['GET'])
-    def get_movies():
+    @requires_auth('get:movies')
+    def get_movies(payload):
         # Order can be by release_date, title or by default - ID
         order_by = request.args.get('order_by', 'id')
         if order_by == 'release_date':
@@ -132,7 +135,8 @@ def create_app(test_config=None):
     '''
 
     @app.route('/actors/<int:id>', methods=['DELETE'])
-    def delete_actor(id):
+    @requires_auth('delete:actors')
+    def delete_actor(payload, id):
         actor = Actor.query.filter_by(id=id).one_or_none()
 
         if actor is None:
@@ -165,7 +169,8 @@ def create_app(test_config=None):
     '''
 
     @app.route('/movies/<int:id>', methods=['DELETE'])
-    def delete_movie(id):
+    @requires_auth('delete:movies')
+    def delete_movie(payload, id):
         movie = Movie.query.filter_by(id=id).one_or_none()
 
         if movie is None:
@@ -202,7 +207,8 @@ def create_app(test_config=None):
           we can set another test for age.
     '''
     @app.route('/actors', methods=['POST'])
-    def post_actor():
+    @requires_auth('post:actors')
+    def post_actor(payload):
         body = request.get_json()
         if not body:
             abort(422)
@@ -252,7 +258,8 @@ def create_app(test_config=None):
     '''
 
     @app.route('/movies', methods=['POST'])
-    def post_movie():
+    @requires_auth('post:movies')
+    def post_movie(payload):
         body = request.get_json()
         if not body:
             abort(422)
@@ -293,7 +300,8 @@ def create_app(test_config=None):
     '''
 
     @app.route('/actors/<int:id>', methods=['PATCH'])
-    def patch_actor(id):
+    @requires_auth('patch:actors')
+    def patch_actor(payload, id):
         body = request.get_json()
 
         if not body:
@@ -347,7 +355,8 @@ def create_app(test_config=None):
         - returns the movie that was modified
     '''
     @app.route('/movies/<int:id>', methods=['PATCH'])
-    def patch_movie(id):
+    @requires_auth('patch:movies')
+    def patch_movie(payload, id):
         body = request.get_json()
 
         if not body:
@@ -436,6 +445,14 @@ def create_app(test_config=None):
             'error': 500,
             'message': 'Internal Server Error'
         }), 500
+
+    @app.errorhandler(AuthError)
+    def unauthorized(error):
+        return jsonify({
+            "success": False,
+            "error": error.status_code,
+            "message": error.error['description']
+        }), error.status_code
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #      _               _                      _

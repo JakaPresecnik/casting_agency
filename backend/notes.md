@@ -40,5 +40,6 @@ Go to:
 https://dev-bfn-8r1t.eu.auth0.com/authorize?audience=casting_agency&
 response_type=token&client_id=5tHDsFBmk1BCUrvSvJS4DAmHYLoych1E&redirect_uri=https://127.0.0.1:8080/logout
 
+change the token variable in test_app.py, and in postman(export after)
 
 Scale up the minimap to 2 in VSCode for comment headlines to take effect.

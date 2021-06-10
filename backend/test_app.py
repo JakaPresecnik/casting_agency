@@ -4,9 +4,13 @@ import json
 import datetime
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils.functions import database_exists, create_database
+from werkzeug.datastructures import Authorization
 
 from app import create_app
 from models import *
+
+token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkZrSzl5dTNpM09SNlRkSzdwR0NobCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iZm4tOHIxdC5ldS5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDg0ODA5MDY1Mzk5NzAxMTUzNTUiLCJhdWQiOlsiY2FzdGluZ19hZ2VuY3kiLCJodHRwczovL2Rldi1iZm4tOHIxdC5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjIzMzE4MjYwLCJleHAiOjE2MjMzMjU0NjAsImF6cCI6IjV0SERzRkJtazFCQ1VydlN2SlM0REFtSFlMb3ljaDFFIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.eCpRf3pGKvgNtW3EmLam4fa6MmwIwma3_rppbpXEEWdb-TzzukuzBuSOrx4ZssQ9o9PgLxzFygoRYjrqGmiaRMAfCKEpqI0GTw_0wg9qkL5oXbGh_flg0VX_l4nS6ccF4xWL2cqOfUkK6eT0v_7tOfQjtq8QdP5FXAPT7P1iqZJMMCqkTn3QA4u4ozSfJSm3EGitkm-5AQnSE0I82lm4InqvmFRTl2X7ynkPu3QNMl1LEvCBEYMNHRxHbJKSakys8qCB6pFzwz4XyVgo95Uh73CPH-EUjKUBvv7Vb0uEF4Zy4VU-05SgXscwImneCsS4nSpeQJlO9AzHr8-bazOgSg'
+JWT = 'bearer ' + token
 
 
 class CastingAgencyTestCase(unittest.TestCase):
@@ -32,6 +36,10 @@ class CastingAgencyTestCase(unittest.TestCase):
             self.db_host,
             self.db_name
         )
+        self.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': JWT
+            }
 
         setup_db(self.app, self.database_path)
 
@@ -87,7 +95,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 #  /___/
 
     def test_get_actors(self):
-        res = self.client().get('/actors')
+        res = self.client().get('/actors', headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -95,7 +103,10 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(len(data['actors']))
 
     def test_404_get_actors_beyond_valid_page(self):
-        res = self.client().get('/actors?page=999')
+        res = self.client().get(
+            '/actors?page=999',
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -111,7 +122,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 #  /___/
 
     def test_get_movies(self):
-        res = self.client().get('/movies')
+        res = self.client().get('/movies', headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -119,7 +130,10 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertTrue(len(data['movies']))
 
     def test_404_get_movies_beyond_valid_page(self):
-        res = self.client().get('/movies?page=999')
+        res = self.client().get(
+            '/movies?page=999',
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -135,7 +149,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 #
 
     def test_delete_actor(self):
-        res = self.client().delete('/actors/1')
+        res = self.client().delete('/actors/1', headers=self.headers)
         data = json.loads(res.data)
 
         actor = Actor.query.filter_by(id=1).one_or_none()
@@ -145,7 +159,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(actor, None)
 
     def test_404_delete_actor_not_exist(self):
-        res = self.client().delete('/actors/1000')
+        res = self.client().delete('/actors/1000', headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -161,7 +175,7 @@ class CastingAgencyTestCase(unittest.TestCase):
 #
 
     def test_delete_movies(self):
-        res = self.client().delete('/movies/1')
+        res = self.client().delete('/movies/1', headers=self.headers)
         data = json.loads(res.data)
 
         movie = Movie.query.filter_by(id=1).one_or_none()
@@ -171,7 +185,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(movie, None)
 
     def test_404_delete_movie_not_exist(self):
-        res = self.client().delete('/actors/1000')
+        res = self.client().delete('/actors/1000', headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -192,7 +206,11 @@ class CastingAgencyTestCase(unittest.TestCase):
             "age": "25",
             "gender": "Unknown"
         }
-        res = self.client().post('/actors', json=test_actor)
+        res = self.client().post(
+            '/actors',
+            json=test_actor,
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -200,7 +218,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['new_actor']['name'], test_actor['name'])
 
     def test_422_post_actor_no_body(self):
-        res = self.client().post('/actors', json={})
+        res = self.client().post(
+            '/actors',
+            json={},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -208,7 +230,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 422)
 
     def test_400_post_actor_actor_data_not_included(self):
-        res = self.client().post('/actors', json={'wrong': 'data'})
+        res = self.client().post(
+            '/actors',
+            json={'wrong': 'data'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -221,7 +247,11 @@ class CastingAgencyTestCase(unittest.TestCase):
              "age": "25",
              "gender": "Unknown"
          }
-        res = self.client().post('/actors', json=test_actor)
+        res = self.client().post(
+            '/actors',
+            json=test_actor,
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 409)
@@ -241,7 +271,11 @@ class CastingAgencyTestCase(unittest.TestCase):
             "title": "Tester",
             "release_date":  "2022-02-02",
         }
-        res = self.client().post('/movies', json=test_movie)
+        res = self.client().post(
+            '/movies',
+            json=test_movie,
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -249,7 +283,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['new_movie']['title'], test_movie['title'])
 
     def test_422_post_movie_no_body(self):
-        res = self.client().post('/movies', json={})
+        res = self.client().post('/movies', json={}, headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -257,7 +291,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 422)
 
     def test_400_post_movie_movie_data_not_included(self):
-        res = self.client().post('/movies', json={'wrong': 'data'})
+        res = self.client().post(
+            '/movies',
+            json={'wrong': 'data'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -273,7 +311,11 @@ class CastingAgencyTestCase(unittest.TestCase):
 #  /_/
 
     def test_patch_actors(self):
-        res = self.client().patch('/actors/2', json={'age': '40'})
+        res = self.client().patch(
+            '/actors/2',
+            json={'age': '40'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -281,7 +323,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['updated_actor']['age'], 40)
 
     def test_404_patch_actors_not_exist(self):
-        res = self.client().patch('/actors/1000', json={'age': '41'})
+        res = self.client().patch(
+            '/actors/1000',
+            json={'age': '41'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -289,7 +335,7 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 404)
 
     def test_422_post_actors_no_body(self):
-        res = self.client().patch('/actors/2', json={})
+        res = self.client().patch('/actors/2', json={}, headers=self.headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -297,7 +343,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 422)
 
     def test_400_patch_actor_actor_data_not_included(self):
-        res = self.client().patch('/actors/2', json={'wrong': 'data'})
+        res = self.client().patch(
+            '/actors/2',
+            json={'wrong': 'data'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -305,7 +355,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 400)
 
     def test_409_post_actor_actor_already_enlisted(self):
-        res = self.client().patch('/actors/2', json={"name": "Actor 2"})
+        res = self.client().patch(
+            '/actors/2',
+            json={"name": "Actor 2"},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 409)
@@ -321,7 +375,11 @@ class CastingAgencyTestCase(unittest.TestCase):
 #  /_/
 
     def test_patch_movies(self):
-        res = self.client().patch('/movies/2', json={'title': 'New Title'})
+        res = self.client().patch(
+            '/movies/2',
+            json={'title': 'New Title'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         movie = Movie.query.filter_by(id=2).one_or_none()
@@ -331,7 +389,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['updated_movie']['title'], 'New Title')
 
     def test_422_patch_movies_no_body(self):
-        res = self.client().patch('/movies/2', json={})
+        res = self.client().patch(
+            '/movies/2',
+            json={},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -339,7 +401,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 422)
 
     def test_404_patch_movie_not_exist(self):
-        res = self.client().patch('/movies/1000', json={'title': 'Not Ex'})
+        res = self.client().patch(
+            '/movies/1000',
+            json={'title': 'Not Ex'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -347,7 +413,11 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(data['error'], 404)
 
     def test_400_patch_movie_movie_data_not_included(self):
-        res = self.client().patch('/movies/2', json={'wrong': 'data'})
+        res = self.client().patch(
+            '/movies/2',
+            json={'wrong': 'data'},
+            headers=self.headers
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)

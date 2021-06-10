@@ -24,6 +24,8 @@ API_AUDIENCE = 'casting_agency'
 AuthError Exception
 Throwing auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
@@ -51,7 +53,7 @@ def verify_decode_jwt(token):
             'code': 'invalid_header',
             'description': 'Authorization malformed.'
         }, 401)
-    
+
     # scan the jwks containing keys to find the one inside the header
     for key in jwks['keys']:
         if key['kid'] == unverified_header['kid']:
@@ -82,7 +84,7 @@ def verify_decode_jwt(token):
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
+                'description': 'Incorrect claims. Check audience and issuer.'
             }, 401)
         except Exception:
             raise AuthError({
@@ -153,6 +155,7 @@ def check_permission(permission, payload):
 #   |   / -_) _` | / _` | || |  _| ' \  / _` / -_) _/ _ \ '_/ _` |  _/ _ \ '_|
 #   |_|_\___\__, | \__,_|\_,_|\__|_||_| \__,_\___\__\___/_| \__,_|\__\___/_|
 #              |_|
+
 
 def requires_auth(permission=''):
     def requires_auth_decorator(func):

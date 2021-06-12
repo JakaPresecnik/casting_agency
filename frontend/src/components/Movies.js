@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-
-const recieveMovies = async () => {
-    const res = await fetch('/movies');
-    try {
-        const data = await res.json();
-        return data.movies
-    } catch(error) {
-        console.log('Error ', error)
-    }
-}
+import { useAuth0 } from '@auth0/auth0-react';
 
 const formatDate = (date) => {
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday',
@@ -29,17 +20,41 @@ const formatDate = (date) => {
 }
 
 function Movies () {
-    const [data, setData] = useState([])
+    const { getAccessTokenSilently } = useAuth0();
+    const [data, setData] = useState(null)
 
     useEffect(() => {
-        recieveMovies()
-        .then(res => setData(res))   
-    }, [])
+        (async () => {
+            try {
+                const token = await getAccessTokenSilently({
+                    audience: 'casting_agency'
+                });
+                const res = await fetch('/movies', {
+                    headers: {
+                        Authorization:`Bearer ${token}`
+                    }
+                })
+                const resData = await res.json()
+                setData(resData)
+            }catch(e) {
+                console.log(e)
+            }
+        })();
+    }, [getAccessTokenSilently])
 
+    if(!data) {
+        return <section>Loading ...</section>
+    }
+    if(data.error) {
+        return (<section>
+            <h1>{data.error}</h1>
+            <h2>{data.message}</h2>
+        </section>)
+    }
 
     return (
         <section>
-            {data.map(movie => (
+            {data.movies.map(movie => (
                 <div key = {movie.id} className="movies">
                     <h3>{movie.title}</h3>
                     <p>ID: <strong>{movie.id}</strong></p>

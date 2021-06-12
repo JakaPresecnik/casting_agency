@@ -1,27 +1,41 @@
 import { useState, useEffect } from 'react';
-
-const recieveActors = async () => {
-    const res = await fetch('/actors');
-    try {
-        const data = await res.json();
-        return data.actors
-    } catch(error) {
-        console.log('Error ', error)
-    }
-}
+import { useAuth0 } from '@auth0/auth0-react';
 
 function Actors () {
-    const [data, setData] = useState([])
+    const { getAccessTokenSilently } = useAuth0();
+    const [data, setData] = useState(null)
 
     useEffect(() => {
-        recieveActors()
-        .then(res => setData(res))   
-    }, [])
+        (async () => {
+            try {
+                const token = await getAccessTokenSilently({
+                    audience: 'casting_agency'
+                });
+                const res = await fetch('/actors', {
+                    headers: {
+                        Authorization:`Bearer ${token}`
+                    }
+                })
+                const resData = await res.json()
+                setData(resData)
+            }catch(e) {
+                console.log(e)
+            }
+        })();
+    }, [getAccessTokenSilently])
 
-
+    if(!data) {
+        return <section>Loading ...</section>
+    }
+    if(data.error) {
+        return (<section>
+            <h1>{data.error}</h1>
+            <h2>{data.message}</h2>
+        </section>)
+    }
     return (
         <section>
-            {data.map(actor => (
+            {data.actors.map(actor => (
                 <div key = {actor.id} className="movies">
                     <h3>{actor.name}</h3>
                     <p>ID: <strong>{actor.id}</strong></p>

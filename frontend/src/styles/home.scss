@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Balsamiq+Sans:700|Open+Sans:400,600&display=swap');
+
+$xlight-green: #d3facf;
+$light-green: #25ad17;
+$green: #168f09;
+$dark-green: #0b7600;
+$xdark-green: #085800;
+
+$light-purple: #ddb5ed;
+$purple: #a657c5;
+$dark-purple: #340247;
+
+$light-orange: #ffe5ba;
+$orange: #af6f0b;
+$dark-orange: #6b4200;
+
+$header-font: 'Balsamiq Sans', cursive;
+$normal-font: 'Open Sans', sans-serif;
+
+.container {
+  background-image: linear-gradient(to right top, $xlight-green, #fff, $light-orange);
+  min-height: 100vh;
+}
+section {
+  max-width: 750px;
+  margin: 2em auto;
+  h1 {
+    font-size: 3em;
+    font-family: $header-font;
+    line-height: 2.2em;
+    color: $green;
+    width: 100%;
+    margin: 0;
+    display: inline;
+  }
+  .home-paragraph {
+    border: 2px solid $orange;
+    margin: 0 1em;
+    background: $light-orange;
+    padding: 1.5em;
+    font-size: 1.15em;
+    line-height: 1.8em;
+  }
+}
+
+.movies {
+  background: $xlight-green;
+  margin: 1.5em;
+  padding: 1em;
+  border: 2px solid $purple;
+  h3 {
+    font-family: $header-font;
+    font-size: 1.8em;
+    margin-bottom: 0.1em;
+    padding-bottom: 0.05em;
+    color: $dark-purple;
+    padding-top: 0.1em;
+    margin-top: 0;
+  }
+  p {
+    font-family: $normal-font;
+    line-height: 0.7em;
+  }
+}

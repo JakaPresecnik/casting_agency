@@ -23,7 +23,7 @@ $normal-font: 'Open Sans', sans-serif;
 }
 section {
   max-width: 750px;
-  margin: 2em auto;
+  margin: 2em auto 0 auto;
   h1 {
     font-size: 3em;
     font-family: $header-font;
@@ -61,4 +61,47 @@ section {
     font-family: $normal-font;
     line-height: 0.7em;
   }
+}
+button {
+  font-size: 1em;
+  padding: 0.5em 0.7em;
+  margin: 0.5em;
+  border: none;
+  border-radius: 0.2em;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.delete {
+    background-color: lightcoral;
+  &:hover {
+    background-color: rgb(218, 106, 106);
+  }
+}
+.update {
+  background-color: lightsteelblue;
+  &:hover {
+    background-color: rgb(149, 176, 212);
+  }
+}
+.new {
+  background-color: $xlight-green;
+  margin: 2em 0.5em;
+  &:hover {
+    background-color: $light-green;
+  }
+}
+span.page-num {
+  margin: 5px;
+  padding-bottom: 50px;
+  /* color: blue; */
+  font-size: 16px;
+  color: $purple;
+}
+
+span.page-num.active {
+  color: $dark-purple;
+  font-weight: bolder;
+  font-size: 20px;
 }

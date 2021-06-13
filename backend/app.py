@@ -78,7 +78,8 @@ def create_app(test_config=None):
 
         return jsonify({
             'success': True,
-            'actors': actors
+            'actors': actors,
+            'length': len(db_actors)
         })
 
 
@@ -116,7 +117,8 @@ def create_app(test_config=None):
 
         return jsonify({
             'success': True,
-            'movies': movies
+            'movies': movies,
+            'length': len(db_mo)
         })
 
 

@@ -12,12 +12,12 @@ function Nav () {
     return (
         <nav>
             <ul>
-                <NavLink to='/'><li>Home</li></NavLink>
+                <NavLink to='/' exact activeClassName="selected"><li>Home</li></NavLink>
                 {isAuthenticated && (
-                    <NavLink to='/movies'><li>Movies</li></NavLink>
+                    <NavLink to='/movies' activeClassName="selected"><li>Movies</li></NavLink>
                 )}
                 {isAuthenticated && (
-                    <NavLink to='/actors'><li>Actors</li></NavLink>
+                    <NavLink to='/actors' activeClassName="selected"><li>Actors</li></NavLink>
                 )}
             </ul>
             <div className='dropdown' >

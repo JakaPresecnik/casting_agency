@@ -10,6 +10,10 @@ import NoMatch from './components/NoMatch';
 import Home from './components/Home';
 import Movies from './components/Movies';
 import Actors from './components/Actors';
+import NewMovie from './components/NewMovie'
+import NewActor from './components/NewActor';
+import UpdateActor from './components/UpdateActor';
+import UpdateMovie from './components/UpdateMovie';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -25,6 +29,10 @@ function App() {
             <Route path='/' exact component={Home} />
             <Route path='/movies' exact component={Movies} />
             <Route path='/actors' component={Actors} />
+            <Route path='/newmovie' component={NewMovie} />
+            <Route path='/newactor' component={NewActor} />
+            <Route path='/updateactor/:id' component={UpdateActor} />
+            <Route path='/updatemovie/:id' component={UpdateMovie} />
             <Route component={NoMatch} />
           </Switch>
       </div>

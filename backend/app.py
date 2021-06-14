@@ -118,7 +118,7 @@ def create_app(test_config=None):
         return jsonify({
             'success': True,
             'movies': movies,
-            'length': len(db_mo)
+            'length': len(db_movies)
         })
 
 

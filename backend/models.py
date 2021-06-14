@@ -23,14 +23,14 @@ DB_PASSWORD = "postgres"
 
 DB_USER = os.getenv('DB_USER')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
-database_host = "localhost:5432"
-database_name = "casting_agency"
+DB_HOST = os.getenv('DB_HOST')
+DB_NAME = os.getenv('DB_NAME')
 
 database_path = "postgresql://{}:{}@{}/{}".format(
     DB_USER,
     DB_PASSWORD,
-    database_host,
-    database_name
+    DB_HOST,
+    DB_NAME
     )
 
 db = SQLAlchemy()

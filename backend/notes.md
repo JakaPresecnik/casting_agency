@@ -9,6 +9,8 @@ Set enviroment variables:
 ```
 $env:DB_USER = "postgres"
 $env:DB_PASSWORD = "piko"
+$env:DB_HOST = "localhost:5432"
+$env:DB_NAME = "casting_agency"
 ```
 
 Run backend:

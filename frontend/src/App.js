@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { HashRouter, Route, Switch } from 'react-router-dom'
 import { useAuth0 } from "@auth0/auth0-react";
 
 import logo from './logo.svg';
@@ -22,7 +22,7 @@ function App() {
     return <section>Loading ...</section>;
   }
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="App">
         <Nav />
         <Switch>
@@ -36,7 +36,7 @@ function App() {
             <Route component={NoMatch} />
           </Switch>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

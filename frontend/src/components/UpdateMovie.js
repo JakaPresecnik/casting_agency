@@ -20,7 +20,7 @@ function UpdateMovie (props) {
         const token = props.location.query.token
         
         try {
-            const res = await fetch('/movies/' + id, {
+            const res = await fetch('https://jaka-casting-agency.herokuapp.com/movies/' + id, {
                 method: 'PATCH',
                 headers: {
                     'content-Type': 'application/json',

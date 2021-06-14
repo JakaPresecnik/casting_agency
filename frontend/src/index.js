@@ -9,7 +9,7 @@ ReactDOM.render(
   <Auth0Provider
     domain="dev-bfn-8r1t.eu.auth0.com"
     clientId="5tHDsFBmk1BCUrvSvJS4DAmHYLoych1E"
-    redirectUri={window.location.origin}
+    redirectUri={window.location.href}
     audience="casting_agency"
   >
     <App />

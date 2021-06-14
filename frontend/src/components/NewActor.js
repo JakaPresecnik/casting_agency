@@ -25,10 +25,10 @@ function NewActor (props) {
         const token = props.location.query.token
         
         try {
-            const res = await fetch('/actors', {
+            const res = await fetch('https://jaka-casting-agency.herokuapp.com/actors', {
                 method: 'POST',
                 headers: {
-                    'content-Type': 'application/json',
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
@@ -51,7 +51,7 @@ function NewActor (props) {
                     <h2>Created!</h2>
                     <p>{data.new_actor.name} was created.</p>
                     <p>Age: {data.new_actor.age}, Gender: {data.new_actor.gender}</p>
-                    <Link to='/actors'><button>Back to Actors</button></Link>
+                    <Link to='/#/actors'><button>Back to Actors</button></Link>
                 </section>
             )
         }else {
@@ -59,7 +59,7 @@ function NewActor (props) {
                 <section className='form-new'>
                     <h2>{data.error}</h2>
                     <p>{data.message}</p>
-                    <Link to='/actors'><button>Back to actors</button></Link>
+                    <Link to='/#/actors'><button>Back to actors</button></Link>
                 </section>
             )
         }

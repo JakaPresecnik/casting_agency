@@ -35,7 +35,7 @@ function Movies () {
                 });
                 setToken(token)
 
-                const res = await fetch('/movies?page=' + page, {
+                const res = await fetch('https://jaka-casting-agency.herokuapp.com/movies?page=' + page, {
                     headers: {
                         Authorization:`Bearer ${token}`
                     }
@@ -51,9 +51,10 @@ function Movies () {
 
     const deleteMovie = async (id) => {
         try {
-            const res = await fetch('/movies/' + id, {
+            const res = await fetch('https://jaka-casting-agency.herokuapp.com/movies/' + id, {
                 method: 'DELETE',
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization:`Bearer ${token}`
                 }
             });

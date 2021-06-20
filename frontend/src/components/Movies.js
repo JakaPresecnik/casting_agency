@@ -54,6 +54,7 @@ function Movies () {
             const res = await fetch('/movies/' + id, {
                 method: 'DELETE',
                 headers: {
+                    'Content-Type': 'application/json',
                     Authorization:`Bearer ${token}`
                 }
             });

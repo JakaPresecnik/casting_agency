@@ -17,9 +17,11 @@ function Actors () {
                     audience: 'casting_agency'
                 });
                 setToken(token)
+                console.log(token)
 
                 const res = await fetch('/actors?page=' + page, {
                     headers: {
+                        'Content-Type': 'application/json',
                         Authorization:`Bearer ${token}`
                     }
                 });

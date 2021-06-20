@@ -25,7 +25,7 @@ function UpdateActor (props) {
         const token = props.location.query.token
         
         try {
-            const res = await fetch('https://jaka-casting-agency.herokuapp.com/actors/' + id, {
+            const res = await fetch('/actors/' + id, {
                 method: 'PATCH',
                 headers: {
                     'content-Type': 'application/json',

@@ -17,8 +17,9 @@ function Actors () {
                     audience: 'casting_agency'
                 });
                 setToken(token)
+                console.log(token)
 
-                const res = await fetch('https://jaka-casting-agency.herokuapp.com/actors?page=' + page, {
+                const res = await fetch('/actors?page=' + page, {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization:`Bearer ${token}`
@@ -34,7 +35,7 @@ function Actors () {
 
     const deleteActor = async (id) => {
         try {
-            const res = await fetch('https://jaka-casting-agency.herokuapp.com/actors/' + id, {
+            const res = await fetch('/actors/' + id, {
                 method: 'DELETE',
                 headers: {
                     Authorization:`Bearer ${token}`

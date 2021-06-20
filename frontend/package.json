@@ -1,5 +1,4 @@
 {
-  "homepage": "https://JakaPresecnik.github.io/casting_agency/",
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
@@ -29,6 +28,7 @@
       "react-app/jest"
     ]
   },
+  "proxy": "http://127.0.0.1:5000",
   "browserslist": {
     "production": [
       ">0.2%",

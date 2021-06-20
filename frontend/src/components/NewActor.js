@@ -25,7 +25,7 @@ function NewActor (props) {
         const token = props.location.query.token
         
         try {
-            const res = await fetch('https://jaka-casting-agency.herokuapp.com/actors', {
+            const res = await fetch('/actors', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

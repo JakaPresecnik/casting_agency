@@ -35,10 +35,9 @@ Open the terminal window and run:
 py -3.7 -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
-set DB_USER=postgres
-set DB_PASSWORD=postgres
-set DB_HOST=localhost:5432
-set DB_NAME=casting_agency
+source setup.sh
+export DB_USER=postgres
+export DB_PASSWORD=postgres
 python app.py
 ```
 There might be other variations of your system. Please try following readme in the backend folder if stuck.

@@ -11,6 +11,8 @@ from models import *
 
 token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkZrSzl5dTNpM09SNlRkSzdwR0NobCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iZm4tOHIxdC5ldS5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDg0ODA5MDY1Mzk5NzAxMTUzNTUiLCJhdWQiOlsiY2FzdGluZ19hZ2VuY3kiLCJodHRwczovL2Rldi1iZm4tOHIxdC5ldS5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNjI0MTczNTgyLCJleHAiOjE2MjQyNTk5ODIsImF6cCI6IjV0SERzRkJtazFCQ1VydlN2SlM0REFtSFlMb3ljaDFFIiwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.ek5Zt458zwwxGh3Fd78Ulra9NXx4rktSIDvlRcXnDSfULn5FmAepTPUrmceiL0V7PKioO228fCXAX-ygUuppQ_gWYyQsKUfr0wdEGS8OjFGPHLqgzrfwvUD6xFg9rX73IMOqIkcXJMZgPPC75Nc8l5zEpMVjTeSazUCYznFXeeyFZkTSa1GqjI4u2LGFG6Q6JAIePihw0EY4TMbXUtFOnhoKL5UB43U65GRXfRVw1bBX1P1d2PUsLbD3vU5lbsClcJBZ5WZ0WjuNd7ZmAmGOmz5vo8NX9iUoFc8nSLxBtZj4lQp_594k6IxdT9pHp2dUklxic_UMewM2iUzRCCgXGQ'
 JWT = 'bearer ' + token
+second_token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkZrSzl5dTNpM09SNlRkSzdwR0NobCJ9.eyJpc3MiOiJodHRwczovL2Rldi1iZm4tOHIxdC5ldS5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWY0ZTZiY2QwZjcyYjQwMDY3YjNjM2U2IiwiYXVkIjpbImNhc3RpbmdfYWdlbmN5IiwiaHR0cHM6Ly9kZXYtYmZuLThyMXQuZXUuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTYyNDE3MzI1OSwiZXhwIjoxNjI0MjU5NjU5LCJhenAiOiI1dEhEc0ZCbWsxQkNVcnZTdkpTNERBbUhZTG95Y2gxRSIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6YWN0b3JzIiwiZ2V0Om1vdmllcyJdfQ.ieEKPPciq1By4s6uieekhIpIsx-NFRXW2NIE0SOF0ri6P_9u5NUt_9PNQC2rAlaSDPxmgLJmXuzrpopbKpMRSujMTcfPIusu7fcsVOTApriScwEeXBynmOgn7BB9sl2SbZGkU_Cd7exHGzOUH_JVDGxWi-TeVzM8clGhjqk0bcrvUssH4ziZCdApyfMr7tjcnlEZkrvDXZvj5HrjaCdaYxHYh0-uFIv9omJaSodbniHiLy8PpYv0QD_PsRkI1Bi6HEPpPoh1z8kZsXOovh5E2wjMJegUqV837QMozVlop9K8M1R542ilF9pib_aGxqp6wCUq-KFkVrb4cI-m2Gf4dw'
+second_JWT = 'bearer ' + second_token
 
 
 class CastingAgencyTestCase(unittest.TestCase):
@@ -40,6 +42,10 @@ class CastingAgencyTestCase(unittest.TestCase):
             'Content-Type': 'application/json',
             'Authorization': JWT
             }
+        self.second_headers = {
+            'Content-Type': 'application/json',
+            'Authorization': second_JWT
+        }
 
         setup_db(self.app, self.database_path)
 
@@ -96,6 +102,14 @@ class CastingAgencyTestCase(unittest.TestCase):
 
     def test_get_actors(self):
         res = self.client().get('/actors', headers=self.headers)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['actors']))
+    
+    def test_assistant_get_actors(self):
+        res = self.client().get('/actors', headers=self.second_headers)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -216,6 +230,23 @@ class CastingAgencyTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
         self.assertEqual(data['new_actor']['name'], test_actor['name'])
+
+    def test_assistant_post_actor(self):
+        test_actor = {
+            "name": "Mr. Assistant Test",
+            "age": "25",
+            "gender": "Unknown"
+        }
+        res = self.client().post(
+            '/actors',
+            json=test_actor,
+            headers=self.second_headers
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 403)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['error'], 403)
 
     def test_422_post_actor_no_body(self):
         res = self.client().post(

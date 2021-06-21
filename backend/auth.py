@@ -1,4 +1,5 @@
 import json
+import os
 from jose import jwt
 from urllib.request import urlopen
 from functools import wraps
@@ -15,9 +16,9 @@ from flask import request
 #   /_/ \_\___/  |_| |_||_|\__/   \___\___/_||_|_| |_\__, |
 #                                                    |___/
 
-AUTH0_DOMAIN = 'dev-bfn-8r1t.eu.auth0.com'
-ALGORITMS = ['RS256']
-API_AUDIENCE = 'casting_agency'
+AUTH0_DOMAIN = os.getenv('AUTH0_DOMAIN')
+ALGORITMS = os.getenv('ALGORITHMS')
+API_AUDIENCE = os.getenv('API_AUDIENCE')
 
 
 '''
